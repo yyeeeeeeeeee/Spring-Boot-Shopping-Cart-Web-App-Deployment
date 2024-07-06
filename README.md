@@ -16,7 +16,7 @@ Step-by-Step Installation
 
 1. Install prerequisite packages:
 * sudo apt-get update
-sudo apt-get install ca-certificates curl
+* sudo apt-get install ca-certificates curl
 
 2. Download and add Docker's official GPG key:
 sudo install -m 0755 -d /etc/apt/keyrings
