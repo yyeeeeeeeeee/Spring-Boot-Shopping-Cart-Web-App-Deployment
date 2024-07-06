@@ -15,12 +15,12 @@ When you create the instances, please edit the security group to allow inbound a
 Step-by-Step Installation
 
 1. Install prerequisite packages:
-* sudo apt-get update
-* sudo apt-get install ca-certificates curl
+sudo apt-get update\
+sudo apt-get install ca-certificates curl\
 
 2. Download and add Docker's official GPG key:
-sudo install -m 0755 -d /etc/apt/keyrings  
-sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc  
+sudo install -m 0755 -d /etc/apt/keyrings\
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc\ 
 sudo chmod a+r /etc/apt/keyrings/docker.asc
 
 4. Add Docker repository to Apt sources:
