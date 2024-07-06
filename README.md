@@ -433,3 +433,107 @@ kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
 ```bash
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.49.0/deploy/static/provider/baremetal/deploy.yaml
 ```
+
+
+
+### Create a Service Account, Role & Assign that role, create a secret for the Service Account, and generate a Token in Jenkins server
+
+First create the namespace using,
+
+```bash
+Kubectl create namespace webapps
+```
+
+#### Creating Service Account
+
+Create a yaml file(sa.yml) with the following;
+
+```bash
+   apiVersion: v1
+   kind: ServiceAccount
+   metadata:
+      name: jenkins
+      namespace: webapps
+```
+execute the yaml file
+
+```bash
+kubectl apply -f sa.yml
+```
+
+#### Creating a Role
+
+Create a yaml file(role.yml) with the following;
+
+```bash
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+   name: app-role
+   namespace: webapps
+rules:
+   - apiGroups:
+   - ""
+   - apps
+   - autoscaling
+   - batch
+   - extensions
+   - policy
+   - rbac.authorization.k8s.io
+resources:
+   - pods
+   - secrets
+   - componentstatuses
+   - configmaps
+   - daemonsets
+   - deployments
+   - events
+   - endpoints
+   - horizontalpodautoscalers
+   - ingress
+   - jobs
+   - limitranges
+   - namespaces
+   - nodes
+   - pods
+   - persistentvolumes
+   - persistentvolumeclaims
+   - resourcequotas
+   - replicasets
+   - replicationcontrollers
+   - serviceaccounts
+- services
+   verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+```
+execute the yaml file
+
+```bash
+kubectl apply -f role.yml
+```
+
+#### Bind the role to service account
+
+Create a yaml file(assign.yml) with the following;
+
+```bash
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+   name: app-rolebinding
+   namespace: webapps
+roleRef:
+   apiGroup: rbac.authorization.k8s.io
+   kind: Role
+   name: app-role
+subjects:
+-  namespace: webapps
+   kind: ServiceAccount
+   name: jenkins
+```
+execute the yaml file
+
+```bash
+kubectl apply -f assign.yml
+```
