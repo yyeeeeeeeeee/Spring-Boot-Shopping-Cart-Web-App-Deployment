@@ -37,7 +37,6 @@ sudo systemctl start jenkins
 sudo systemctl enable jenkins
 
 8. Access Jenkins:
-• Open a web browser and go to http://your_server_ip_or_domain:8080.
-• You will see a page asking for the initial admin password. Retrieve it using:
-• sudo cat /var/lib/jenkins/secrets/initialAdminPassword
-• Enter the password, install suggested plugins, and create your firstadmin user. or follow this official document link: https://www.jenkins.io/doc/book/installing/linux/#debianubuntu
+- Open a web browser and go to http://your_server_ip_or_domain:8080.
+- You will see a page asking for the initial admin password. Retrieve it using: sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+- Enter the password, install suggested plugins, and create your firstadmin user. or follow this official document link: https://www.jenkins.io/doc/book/installing/linux/#debianubuntu
