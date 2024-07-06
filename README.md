@@ -181,6 +181,148 @@ Update your pom.xml file with your Nexus repositories.
 
 Copy the maven-releases URL, and maven-snapshots URL from the Nexus Repository  and update in the pom.xml file in the code repository.
 
+### Create the pipeline in Jenkins.
+
+Now write the Jenkinsfile
+
+pipeline {
+   agent any
+   
+   tools {
+      jdk 'jdk17'
+      maven 'maven3'
+   }
+   
+environment {
+   SCANNER_HOME = tool 'sonar-scanner'
+}
+
+stages {
+   stage('Git Checkout') {
+      steps {
+         git branch: 'main', url: ‘https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-  Deployment.git’
+            }
+}
+
+   stage('Compile') {
+      steps {
+         sh "mvn compile"
+      }
+   }
+   
+   stage('Unit Test') {
+      steps {
+         sh "mvn package -DskipTests=true"
+      }
+   }
+   
+   stage('SonarQube Analysis') {
+      steps {
+         withSonarQubeEnv('sonar') {
+            sh '''$SCANNER_HOME/bin/sonar-scanner \
+            -Dsonar.projectKey=Mission \
+            -Dsonar.projectName=Mission \
+            -Dsonar.java.binaries=.'''
+         }
+      }
+   }
+stage('Trivy Scan File System') {
+steps {
+sh "trivy fs --format table -o trivy-fs-report.html ."
+}
+}
+
+stage('Build') {
+steps {
+sh "mvn package -DskipTests=true"
+}
+}
+stage('Deploy Artifacts To Nexus') {
+steps {
+withMaven(globalMavenSettingsConfig: 'maven-setting', jdk: 'jdk17', maven:
+'maven3', mavenSettingsConfig: '', traceability: true) {
+sh "mvn deploy -DskipTests=true"
+}
+}
+}
+stage('Build & Tag Docker Image') {
+steps {
+script {
+withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
+sh "docker build -t bijan9438/monitor:latest ."
+}
+}
+}
+}
+stage('Trivy Scan Image') {
+steps {
+sh "trivy image --format table -o trivy-image-report.html bijan9438/monitor:latest"
+}
+}
+stage('Publish Docker Image') {
+steps {
+script {
+withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
+sh "docker push bijan9438/monitor:latest"
+}
+}
+}
+}
+stage('Deploy to EKS') {
+steps {
+withKubeConfig(caCertificate: '', clusterName: 'my-eks22', contextName: '',
+credentialsId: 'k8-token', namespace: 'webapps', restrictKubeConfigAccess: false, serverUrl:
+'https://FE0E7FFC80B64E124F6F3EA8EDA2FE7E.sk1.ap-south-1.eks.amazonaws.com') {
+sh "kubectl apply -f ds.yml -n webapps"
+sleep 60
+}
+}
+}
+stage('Verify deployment') {
+steps {
+withKubeConfig(caCertificate: '', clusterName: 'my-eks22', contextName: '',
+credentialsId: 'k8-token', namespace: 'webapps', restrictKubeConfigAccess: false, serverUrl:
+'https://FE0E7FFC80B64E124F6F3EA8EDA2FE7E.sk1.ap-south-1.eks.amazonaws.com') {
+sh "kubectl get pods -n webapps"
+sh "kubectl get svc -n webapps"
+}
+}
+}
+}
+post {
+always {
+script {
+def jobName = env.JOB_NAME
+def buildNumber = env.BUILD_NUMBER
+def pipelineStatus = currentBuild.result ?: 'UNKNOWN'
+def bannerColor = pipelineStatus.toUpperCase() == 'SUCCESS' ? 'green' : 'red'
+def body = """
+<html>
+<body>
+<div style="border: 4px solid ${bannerColor}; padding: 10px;">
+<h2>${jobName} - Build ${buildNumber}</h2>
+<div style="background-color: ${bannerColor}; padding: 10px;">
+<h3 style="color: white;">Pipeline Status: ${pipelineStatus.toUpperCase()}</h3>
+</div>
+<p>Check the <a href="${BUILD_URL}">console output</a>.</p>
+</div>
+</body>
+</html>
+"""
+emailext (
+subject: "${jobName} - Build ${buildNumber} - ${pipelineStatus.toUpperCase()}",
+body: body,
+to: 'place-your-email@gmail.com',
+from: 'jenkins@example.com',
+replyTo: 'jenkins@example.com',
+mimeType: 'text/html',
+attachmentsPattern: 'trivy-image-report.html'
+)
+}
+}
+}
+}
+
 
 
 
