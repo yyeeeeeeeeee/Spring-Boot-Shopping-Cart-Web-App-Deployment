@@ -14,7 +14,7 @@ When you create the instances, please edit the security group to allow inbound a
 
 Step-by-Step Installation
 
-1. Install prerequisite packages:\
+1. Install prerequisite packages: \
    
    sudo apt-get update\
    sudo apt-get install ca-certificates curl
