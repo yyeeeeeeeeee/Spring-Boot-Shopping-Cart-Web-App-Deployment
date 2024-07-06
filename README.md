@@ -2,7 +2,7 @@
 
 ## Phase-1
 
-Create 3 EC2 Instances with 20GB RAM and choose t2.medium
+Create 3 EC2 Instances with 20GB storage, 4GB RAM and choose t2.medium
 
 ![image](https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment/assets/86109995/d67e8e6a-6bde-4013-afd2-3973457947b6)
 
@@ -92,3 +92,28 @@ Follow this official document if you find any errors: Link: https://docs.docker.
    - Open a web browser and go to http://your_server_ip_or_domain:8080.
    - You will see a page asking for the initial admin password. Retrieve it using: sudo cat /var/lib/jenkins/secrets/initialAdminPassword
    - Enter the password, install suggested plugins, and create your firstadmin user. or follow this official document link: https://www.jenkins.io/doc/book/installing/linux/#debianubuntu
+
+
+### SonarQube Setup:
+
+Ssh into sonarqube ec2 instance\
+
+docker run -d –name sonar -p 9000:9000 sonarqube:lts-comminity\
+
+access using <publicip:9000>\
+
+username: admin\
+password:admin\
+
+### Nexus Setup:
+
+Ssh into nexus ec2 instance\
+
+docker run -d –name nexus -p 8081:8081 sonatype/nexus3\
+
+access using <publicip:8081>\
+
+go inside of the sonatype/nexus3 container: docker exec -it <container_id> /bin/bash\
+
+sign to nexus using the password, the password is stored in ‘sonatype-work/nexus3/admin.password’.\view it using cat sonatype-work/nexus3/admin.password' command.
+
