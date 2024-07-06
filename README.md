@@ -17,37 +17,46 @@ When you create the instances, please edit the security group to allow inbound a
 #### 1. Install prerequisite packages: 
    
 ```bash
-   sudo apt-get update \
+   sudo apt-get update 
    sudo apt-get install ca-certificates curl
 ```
 
 #### 2. Download and add Docker's official GPG key:
 
 ```bash
-   sudo install -m 0755 -d /etc/apt/keyrings \
-   sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc \
+   sudo install -m 0755 -d /etc/apt/keyrings 
+   sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc 
    sudo chmod a+r /etc/apt/keyrings/docker.asc
 ```
 
 #### 3. Add Docker repository to Apt sources:
-   
+
+```bash
    echo \
-   &nbsp;&nbsp; "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu  \\ \
-   &nbsp;&nbsp; $(. /etc/os-release && echo "$VERSION_CODENAME") stable" |  \\ \
-   &nbsp;&nbsp; sudo tee /etc/apt/sources.list.d/docker.list > /dev/null  \\ \
+      "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+      $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+      sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
    sudo apt-get update
+```
 
 #### 4. Update package index:
-   
+  
+```bash 
    sudo apt-get update
+```
 
 #### 5. Install Docker packages:
    
+```bash
    sudo apt-get install docker-ce docker-ce-cli containerd.io -y
+```
 
 #### 6. Grant permission to Docker socket (optional, for convenience):
 
+```bash
    sudo chmod 666 /var/run/docker.sock
+```
 
 By following these steps, you should have successfully installed Docker on your Ubuntu system. You can now start using Docker to containerize and manage your applications.
 
@@ -58,13 +67,17 @@ Follow this official document if you find any errors: Link: https://docs.docker.
 #### Step-by-Step Installation
 
 #### 1. Update the system:
-   
+
+```bash
    sudo apt-get update
    sudo apt-get upgrade -y
+```
 
 #### 2. Install Java (Jenkins requires Java):
 
+```bash
    sudo apt install -y fontconfig openjdk-17-jre-headless -y
+```
 
 #### 3. Add Jenkins repository key:
 
@@ -112,9 +125,9 @@ Follow this official document if you find any errors: Link: https://docs.docker.
 
 -ssh into sonarqube ec2 instance
 
--docker run -d –name sonar -p 9000:9000 sonarqube:lts-comminity
+-run -> docker run -d –name sonar -p 9000:9000 sonarqube:lts-comminity
 
--access using <publicip:9000>
+-access using <public_ip:9000>
 
 username: admin
 password:admin
@@ -123,7 +136,7 @@ password:admin
 
 -ssh into nexus ec2 instance
 
--docker run -d –name nexus -p 8081:8081 sonatype/nexus3 
+-run -> docker run -d –name nexus -p 8081:8081 sonatype/nexus3 
 
 -access using <public_ip:8081>
 
@@ -354,8 +367,9 @@ Create one master and two worker nodes (3 EC2 instances with 20GB storage, t2.me
 
 #### 1. Update System Packages [On Master & Worker Nodes]
 
+```bash
 sudo apt-get update
-
+```
 
 #### 2. Install Docker[On Master & Worker Nodes]
 
@@ -364,39 +378,43 @@ sudo apt install docker.io -y
 sudo chmod 666 /var/run/docker.sock
 ```
 
-### 3. Install Required Dependencies for Kubernetes[On Master & Worker Node]
+#### 3. Install Required Dependencies for Kubernetes[On Master & Worker Nodes]
 
 ```bash
 sudo apt-get install -y apt-transport-https ca-certificates curl gnupg
 sudo mkdir -p -m 755 /etc/apt/keyrings
 ```
 
-### 4. Add Kubernetes Repository and GPG Key[On Master & Worker Node]
+#### 4. Add Kubernetes Repository and GPG Key[On Master & Worker Nodes]
 
 ```bash
 curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
 ```
 
-### 5. Update Package List[On Master & Worker Node]
+#### 5. Update Package List[On Master & Worker Node]
 
 ```bash
 sudo apt update
 ```
 
-### 6. Install Kubernetes Components[On Master & Worker Node]
+#### 6. Install Kubernetes Components[On Master & Worker Nodes]
 
 ```bash
 sudo apt install -y kubeadm=1.28.1-1.1 kubelet=1.28.1-1.1 kubectl=1.28.1-1.1
 ```
 
-### 7. Initialize Kubernetes Master Node [On MasterNode]
+#### 7. Initialize Kubernetes Master Node [On MasterNode]
 
 ```bash
 sudo kubeadm init --pod-network-cidr=10.244.0.0/16
 ```
 
-### 8. Configure Kubernetes Cluster [On MasterNode]
+After running the above command, you will receive below below-highlighted. Make sure to run that on the worker nodes so as to join them with the master node.
+
+![image](https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment/assets/86109995/8db6b226-294f-4790-bf93-2ecc9fae3bec)
+
+#### 8. Configure Kubernetes Cluster [On MasterNode]
 
 ```bash
 mkdir -p $HOME/.kube
@@ -404,6 +422,14 @@ sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ```
 
-### 9. Deploy Networking Solution (Calico) [On MasterNode]
+#### 9. Deploy Networking Solution (Calico) [On MasterNode]
 
 ```bash
+kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+```
+
+#### 10. Deploy Ingress Controller (NGINX) [On MasterNode]
+
+```bash
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.49.0/deploy/static/provider/baremetal/deploy.yaml
+```
