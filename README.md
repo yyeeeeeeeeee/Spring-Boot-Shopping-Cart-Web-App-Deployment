@@ -28,9 +28,9 @@ When you create the instances, please edit the security group to allow inbound a
 #### 3. Add Docker repository to Apt sources:
    
    echo \
-   &nbsp; "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu  \\ \
-   &nbsp; $(. /etc/os-release && echo "$VERSION_CODENAME") stable" |  \\ \
-   &nbsp; sudo tee /etc/apt/sources.list.d/docker.list > /dev/null  \\ \
+   &nbsp;&nbsp; "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu  \\ \
+   &nbsp;&nbsp; $(. /etc/os-release && echo "$VERSION_CODENAME") stable" |  \\ \
+   &nbsp;&nbsp; sudo tee /etc/apt/sources.list.d/docker.list > /dev/null  \\ \
    sudo apt-get update
 
 #### 4. Update package index:
@@ -64,14 +64,15 @@ Follow this official document if you find any errors: Link: https://docs.docker.
 
 #### 3. Add Jenkins repository key:
 
-   sudo wget -O /usr/share/keyrings/jenkins-keyring.asc https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+   sudo wget -O /usr/share/keyrings/jenkins-keyring.asc  \\ \
+   &nbsp;&nbsp; https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
 
 #### 4. Add Jenkins repository:
 
    echo  \\ \
-   &nbsp; "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc]  \\ \
-   &nbsp; https://pkg.jenkins.io/debian-stable binary/" |  \\ \
-   &nbsp; sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
+   &nbsp;&nbsp; "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc]  \\ \
+   &nbsp;&nbsp; https://pkg.jenkins.io/debian-stable binary/" |  \\ \
+   &nbsp;&nbsp; sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
 
 #### 5. Update the package index:
 
