@@ -1,12 +1,12 @@
 # Spring-Boot-Shopping-Cart-Web-App-Deployment
 
-Phase-1
+## Phase-1
 
 Create 3 EC2 Instances with 20GB RAM and choose t2.medium
 
 ![image](https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment/assets/86109995/d67e8e6a-6bde-4013-afd2-3973457947b6)
 
-#Setting Up Jenkins on Ubuntu
+### Setting Up Jenkins on Ubuntu
 
 Step-by-Step Installation
 
