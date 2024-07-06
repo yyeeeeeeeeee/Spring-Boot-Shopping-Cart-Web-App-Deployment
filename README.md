@@ -96,24 +96,24 @@ Follow this official document if you find any errors: Link: https://docs.docker.
 
 ### SonarQube Setup:
 
-ssh into sonarqube ec2 instance
+-ssh into sonarqube ec2 instance
 
-docker run -d –name sonar -p 9000:9000 sonarqube:lts-comminity
+-docker run -d –name sonar -p 9000:9000 sonarqube:lts-comminity
 
-access using <publicip:9000>\
+-access using <publicip:9000>
 
 username: admin
 password:admin
 
 ### Nexus Setup:
 
-ssh into nexus ec2 instance
+-ssh into nexus ec2 instance
 
-docker run -d –name nexus -p 8081:8081 sonatype/nexus3\
+-docker run -d –name nexus -p 8081:8081 sonatype/nexus3\
 
-access using <publicip:8081>
+-access using <public_ip:8081>
 
-go inside of the sonatype/nexus3 container: docker exec -it <container_id> /bin/bash\
+-go inside of the sonatype/nexus3 container: docker exec -it <container_id> /bin/bash\
 
-sign to nexus using the password, the password is stored in ‘sonatype-work/nexus3/admin.password’.\view it using cat sonatype-work/nexus3/admin.password' command.
+-sign to nexus using the username: admin and password; the password is stored in ‘sonatype-work/nexus3/admin.password’.\view it using cat sonatype-work/nexus3/admin.password' command.
 
