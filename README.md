@@ -185,6 +185,7 @@ Copy the maven-releases URL, and maven-snapshots URL from the Nexus Repository  
 
 Now write the Jenkinsfile
 
+```
 pipeline {
    agent any
    
@@ -223,6 +224,14 @@ stages {
             -Dsonar.projectKey=Mission \
             -Dsonar.projectName=Mission \
             -Dsonar.java.binaries=.'''
+         }
+      }
+   }
+
+   stage('OWASP Dependency Check') {
+      steps {
+         dependencyCheck additionalarguments: ' --scan ./', odcInstallation: 'dependency-check' \
+         dependencyCheckPublisher pattern: '**/dependency-check-report.xml' \
          }
       }
    }
@@ -323,7 +332,7 @@ attachmentsPattern: 'trivy-image-report.html'
 }
 }
 
-
+```
 
 
 Add DockerHub credentials in Jenkins:
