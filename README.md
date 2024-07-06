@@ -39,9 +39,10 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io -y
 
 6. Grant permission to Docker socket (optional, for convenience):
 sudo chmod 666 /var/run/docker.sock
+
 By following these steps, you should have successfully installed Docker on your Ubuntu system. You can now start using Docker to containerize and manage your applications.
 
-Follow this official document if you find any errors: Link: Install Docker Engine on Ubuntu | Docker Docs
+Follow this official document if you find any errors: Link: https://docs.docker.com/engine/install/ubuntu/
 
 ### Setting Up Jenkins on Ubuntu
 
