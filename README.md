@@ -14,29 +14,29 @@ When you create the instances, please edit the security group to allow inbound a
 
 Step-by-Step Installation
 
-1. Install prerequisite packages:
+1. Install prerequisite packages:\
 sudo apt-get update\
-sudo apt-get install ca-certificates curl\
+sudo apt-get install ca-certificates curl
 
-2. Download and add Docker's official GPG key:
+2. Download and add Docker's official GPG key:\
 sudo install -m 0755 -d /etc/apt/keyrings\
 sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc\ 
 sudo chmod a+r /etc/apt/keyrings/docker.asc
 
-4. Add Docker repository to Apt sources:
-echo "deb [arch=$(dpkg --print-architecture) signed
-by=/etc/apt/keyrings/docker.asc]
-https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo
-"$VERSION_CODENAME") stable" | sudo tee
-/etc/apt/sources.list.d/docker.list > /dev/null
-
-5. Update package index:
+4. Add Docker repository to Apt sources:\
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null\
 sudo apt-get update
 
-6. Install Docker packages:
+6. Update package index:
+sudo apt-get update
+
+7. Install Docker packages:
 sudo apt-get install docker-ce docker-ce-cli containerd.io -y
 
-7. Grant permission to Docker socket (optional, for convenience):
+8. Grant permission to Docker socket (optional, for convenience):
 sudo chmod 666 /var/run/docker.sock
 
 By following these steps, you should have successfully installed Docker on your Ubuntu system. You can now start using Docker to containerize and manage your applications.
