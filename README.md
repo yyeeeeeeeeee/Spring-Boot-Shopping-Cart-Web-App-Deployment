@@ -175,6 +175,13 @@ Go to content and add
    &nbsp; i) servers with the id = maven-releases, username, and password of the Nexus instance. (one we are going to release for production environments)
    &nbsp; ii) servers with the id = maven-snapshots, username, and password of the Nexus instance. (one we are going to release for development environments)
 
+Nexus Configuration:
+
+Update your pom.xml file with your Nexus repositories.
+
+Copy the maven-releases URL, and maven-snapshots URL from the Nexus Repository  and update in the pom.xml file in the code repository.
+
+
 
 
 Add DockerHub credentials in Jenkins:
