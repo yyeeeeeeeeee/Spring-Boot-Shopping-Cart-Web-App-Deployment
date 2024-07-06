@@ -64,15 +64,15 @@ Follow this official document if you find any errors: Link: https://docs.docker.
 
 #### 3. Add Jenkins repository key:
 
-   sudo wget -O /usr/share/keyrings/jenkins-keyring.asc  \\ \
-   &nbsp;&nbsp; https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+   sudo wget -O /usr/share/keyrings/Jenkins-keyring.asc  \\ \
+   &nbsp;&nbsp; https://pkg.Jenkins.io/debian-stable/Jenkins.io-2023.key
 
 #### 4. Add Jenkins repository:
 
    echo  \\ \
-   &nbsp;&nbsp; "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc]   \\ \
-   &nbsp;&nbsp; https://pkg.jenkins.io/debian-stable binary/" |   \\ \
-   &nbsp;&nbsp; sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
+   &nbsp;&nbsp; "deb [signed-by=/usr/share/keyrings/Jenkins-keyring.asc]   \\ \
+   &nbsp;&nbsp; https://pkg.Jenkins.io/debian-stable binary/" |   \\ \
+   &nbsp;&nbsp; sudo tee /etc/apt/sources.list.d/Jenkins.list > /dev/null
 
 #### 5. Update the package index:
 
@@ -80,18 +80,18 @@ Follow this official document if you find any errors: Link: https://docs.docker.
 
 #### 6. Install Jenkins:
 
-   sudo apt-get install -y jenkins
+   sudo apt-get install -y Jenkins
 
 #### 7. Start and enable Jenkins:
 
-   sudo systemctl start jenkins
-   sudo systemctl enable jenkins
+   sudo systemctl start Jenkins
+   sudo systemctl enable Jenkins
 
 #### 8. Access Jenkins:
 
    - Open a web browser and go to http://your_server_ip_or_domain:8080.
-   - You will see a page asking for the initial admin password. Retrieve it using: sudo cat /var/lib/jenkins/secrets/initialAdminPassword
-   - Enter the password, install suggested plugins, and create your firstadmin user. or follow this official document link: https://www.jenkins.io/doc/book/installing/linux/#debianubuntu
+   - You will see a page asking for the initial admin password. Retrieve it using: sudo cat /var/lib/Jenkins/secrets/initialAdminPassword
+   - Enter the password, install suggested plugins, and create your firstadmin user. or follow this official document link: https://www.Jenkins.io/doc/book/installing/linux/#debianubuntu
 
 
 ### SonarQube Setup:
@@ -109,13 +109,75 @@ password:admin
 
 -ssh into nexus ec2 instance
 
--docker run -d –name nexus -p 8081:8081 sonatype/nexus3\
+-docker run -d –name nexus -p 8081:8081 sonatype/nexus3 
 
 -access using <public_ip:8081>
 
--go inside of the sonatype/nexus3 container: docker exec -it <container_id> /bin/bash \
+-go inside of the sonatype/nexus3 container: docker exec -it <container_id> /bin/bash 
 
--sign to nexus using the username: admin and password; the password is stored in ‘sonatype-work/nexus3/admin.password’. \
+-sign to nexus using the username: admin and password; the password is stored in ‘sonatype-work/nexus3/admin.password’. 
  
 -view it using cat sonatype-work/nexus3/admin.password' command.
 
+===================================
+Install Plugins in Jenkins
+
+1. Eclipse Temurin installer -> for jdk
+2. Sonarqube scanner
+3. Docker
+4. Docker pipeline
+5. ClodBees Docker Build and Publish
+6. docker-build-step
+7. OWASP Dependency-Check
+8. Config file provider -> for Nexus
+9. Nexus Artifact Uploader
+10. Kubernetes
+11. Kubernetes cli
+12. Kubernetes credentials
+13. Kubernetes clint api
+14. Maven integration
+15. Pipeline maven integration
+
+Now we installed the tools and Now we need to configure them
+
+Go to manage Jenkins -> Tools
+
+1. Jdk -> name= jdk17 , install automatically from adoptium.net, version= jdk17 latest
+2. Sonarqube scanner -> name= sonar-scanner, Install automatically
+3. Maven -> name= maven3, version= 3.6.3
+4. Dependency-Check installation -> name= dependency-check, version= dependency-check6.5.1
+5. Docker -> name=docker, install automatically from docker.com
+
+
+### Configure the SonarQube server in Jenkins
+
+1. Firstly generate the token in SonarQube
+   
+Goto Administration -> security -> users -> update token -> name= sonar-token and
+generate
+
+2. Add the token to Jenkins
+
+Goto manage Jenkins -> credentials -> global -> kind= secret text -> secret=<your-token>, id=sonar-token, description=sonar-token
+
+3. Configure SonarQube servers in Jekins
+Go to manage Jenkins -> system -> sonarqube server -> name=sonar, url=http://<public_ip>:9000, token=sonar-token
+
+
+### Configure the Nexus server in Jenkins
+
+Nexus authentication with Jenkins:
+
+Go to manage Jenkins -> manage files -> add new config -> select Global Maven settings.xml,
+id=maven-setting & click next
+
+Go to content and add 
+   &nbsp; i) servers with the id = maven-releases, username, and password of the Nexus instance. (one we are going to release for production environments)
+   &nbsp; ii) servers with the id = maven-snapshots, username, and password of the Nexus instance. (one we are going to release for development environments)
+
+
+
+Add DockerHub credentials in Jenkins:
+
+Goto manage Jenkins -> credentials -> kind=username and password, username=<your-
+username>, password=<your-password>, id=docker-credentials, description=docker-credentials
