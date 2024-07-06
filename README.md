@@ -16,14 +16,18 @@ When you create the instances, please edit the security group to allow inbound a
 
 #### 1. Install prerequisite packages: 
    
+```bash
    sudo apt-get update \
    sudo apt-get install ca-certificates curl
+```
 
 #### 2. Download and add Docker's official GPG key:
-   
+
+```bash
    sudo install -m 0755 -d /etc/apt/keyrings \
    sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc \
    sudo chmod a+r /etc/apt/keyrings/docker.asc
+```
 
 #### 3. Add Docker repository to Apt sources:
    
@@ -64,28 +68,38 @@ Follow this official document if you find any errors: Link: https://docs.docker.
 
 #### 3. Add Jenkins repository key:
 
-   sudo wget -O /usr/share/keyrings/Jenkins-keyring.asc  \\ \
-   &nbsp;&nbsp; https://pkg.Jenkins.io/debian-stable/Jenkins.io-2023.key
+```bash
+   sudo wget -O /usr/share/keyrings/Jenkins-keyring.asc \
+   https://pkg.Jenkins.io/debian-stable/Jenkins.io-2023.key
+```
 
 #### 4. Add Jenkins repository:
 
-   echo  \\ \
-   &nbsp;&nbsp; "deb [signed-by=/usr/share/keyrings/Jenkins-keyring.asc]   \\ \
-   &nbsp;&nbsp; https://pkg.Jenkins.io/debian-stable binary/" |   \\ \
-   &nbsp;&nbsp; sudo tee /etc/apt/sources.list.d/Jenkins.list > /dev/null
+```bash
+   echo \
+      "deb [signed-by=/usr/share/keyrings/Jenkins-keyring.asc] \
+      https://pkg.Jenkins.io/debian-stable binary/" | \
+      sudo tee /etc/apt/sources.list.d/Jenkins.list > /dev/null
+```
 
 #### 5. Update the package index:
 
+```bash
    sudo apt-get update
+```
 
 #### 6. Install Jenkins:
 
+```bash
    sudo apt-get install -y Jenkins
+```
 
 #### 7. Start and enable Jenkins:
 
+```bash
    sudo systemctl start Jenkins
    sudo systemctl enable Jenkins
+```
 
 #### 8. Access Jenkins:
 
@@ -136,7 +150,7 @@ Install Plugins in Jenkins
 12. Kubernetes credentials
 13. Kubernetes clint api
 14. Maven integration
-15. Pipeline maven integration
+15. Pipeline Maven integration Plugin
 
 Now we installed the tools and Now we need to configure them
 
@@ -213,16 +227,16 @@ stages {
    
    stage('Unit Test') {
       steps {
-         sh "mvn package -DskipTests=true"
+         sh "mvn test -DskipTests=true"
       }
    }
    
    stage('SonarQube Analysis') {
       steps {
          withSonarQubeEnv('sonar') {
-            sh '''$SCANNER_HOME/bin/sonar-scanner \
-            -Dsonar.projectKey=Mission \
-            -Dsonar.projectName=Mission \
+            sh '''$SCANNER_HOME/bin/sonar-scanner 
+            -Dsonar.projectKey=Mission 
+            -Dsonar.projectName=Mission 
             -Dsonar.java.binaries=.'''
          }
       }
@@ -230,8 +244,8 @@ stages {
 
    stage('OWASP Dependency Check') {
       steps {
-         dependencyCheck additionalarguments: ' --scan ./', odcInstallation: 'dependency-check' \
-         dependencyCheckPublisher pattern: '**/dependency-check-report.xml' \
+         dependencyCheck additionalarguments: ' --scan ./', odcInstallation: 'dependency-check' 
+         dependencyCheckPublisher pattern: '**/dependency-check-report.xml' 
          }
       }
    }
@@ -241,19 +255,19 @@ sh "trivy fs --format table -o trivy-fs-report.html ."
 }
 }
 
-stage('Build') {
-steps {
-sh "mvn package -DskipTests=true"
-}
-}
-stage('Deploy Artifacts To Nexus') {
-steps {
-withMaven(globalMavenSettingsConfig: 'maven-setting', jdk: 'jdk17', maven:
-'maven3', mavenSettingsConfig: '', traceability: true) {
-sh "mvn deploy -DskipTests=true"
-}
-}
-}
+   stage('Build') {
+      steps {
+         sh "mvn package -DskipTests=true"
+      }
+   }
+
+   stage('Deploy Artifacts To Nexus') {
+      steps {
+         withMaven(globalMavenSettingsConfig: 'maven-setting', jdk: 'jdk17', maven: 'maven3', mavenSettingsConfig: '', traceability: true) {
+            sh "mvn deploy -DskipTests=true"
+         }
+      }
+   }
 stage('Build & Tag Docker Image') {
 steps {
 script {
@@ -334,8 +348,62 @@ attachmentsPattern: 'trivy-image-report.html'
 
 ```
 
+### Setup K8 Cluster
+=================================
+Create one master and two worker nodes (3 EC2 instances with 20GB storage, t2.medium, Ubuntu image)
 
-Add DockerHub credentials in Jenkins:
+#### 1. Update System Packages [On Master & Worker Nodes]
 
-Goto manage Jenkins -> credentials -> kind=username and password, username=<your-
-username>, password=<your-password>, id=docker-credentials, description=docker-credentials
+sudo apt-get update
+
+
+#### 2. Install Docker[On Master & Worker Nodes]
+
+```bash
+sudo apt install docker.io -y
+sudo chmod 666 /var/run/docker.sock
+```
+
+### 3. Install Required Dependencies for Kubernetes[On Master & Worker Node]
+
+```bash
+sudo apt-get install -y apt-transport-https ca-certificates curl gnupg
+sudo mkdir -p -m 755 /etc/apt/keyrings
+```
+
+### 4. Add Kubernetes Repository and GPG Key[On Master & Worker Node]
+
+```bash
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+```
+
+### 5. Update Package List[On Master & Worker Node]
+
+```bash
+sudo apt update
+```
+
+### 6. Install Kubernetes Components[On Master & Worker Node]
+
+```bash
+sudo apt install -y kubeadm=1.28.1-1.1 kubelet=1.28.1-1.1 kubectl=1.28.1-1.1
+```
+
+### 7. Initialize Kubernetes Master Node [On MasterNode]
+
+```bash
+sudo kubeadm init --pod-network-cidr=10.244.0.0/16
+```
+
+### 8. Configure Kubernetes Cluster [On MasterNode]
+
+```bash
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+```
+
+### 9. Deploy Networking Solution (Calico) [On MasterNode]
+
+```bash
