@@ -146,8 +146,45 @@ password:admin
  
 -view it using cat sonatype-work/nexus3/admin.password' command.
 
-===================================
-Install Plugins in Jenkins
+
+### Installing Trivy on Jenkins Server
+
+Step-by-Step Installation
+
+#### 1. Install prerequisite packages:
+
+```bash
+sudo apt-get install wget apt-transport-https gnupg lsb-release
+```
+
+#### 2. Add Trivy repository key:
+
+```bash
+wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | gpg --dearmor | sudo tee /usr/share/keyrings/trivy.gpg > /dev/null | sudo apt-key add -
+```
+#### 3. Add Trivy repository to sources:
+
+```bash
+echo "deb [signed-by=/usr/share/keyrings/trivy.gpg] https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main" | sudo tee -a /etc/apt/sources.list.d/trivy.list
+```
+#### 4. Update package index:
+
+```bash
+sudo apt-get update
+```
+
+#### 5. Install Trivy:
+
+```bash
+sudo apt-get install trivy -y
+```
+
+or follow this official document link: https://aquasecurity.github.io/trivy/v0.18.3/installation/
+
+
+=========================================================================
+
+### Install Plugins in Jenkins
 
 1. Eclipse Temurin installer -> for jdk
 2. Sonarqube scanner
@@ -248,8 +285,8 @@ stages {
       steps {
          withSonarQubeEnv('sonar') {
             sh '''$SCANNER_HOME/bin/sonar-scanner 
-            -Dsonar.projectKey=Mission 
-            -Dsonar.projectName=Mission 
+            -Dsonar.projectKey=Ekart 
+            -Dsonar.projectName=Ekart 
             -Dsonar.java.binaries=.'''
          }
       }
@@ -262,11 +299,6 @@ stages {
          }
       }
    }
-stage('Trivy Scan File System') {
-steps {
-sh "trivy fs --format table -o trivy-fs-report.html ."
-}
-}
 
    stage('Build') {
       steps {
@@ -281,88 +313,47 @@ sh "trivy fs --format table -o trivy-fs-report.html ."
          }
       }
    }
-stage('Build & Tag Docker Image') {
-steps {
-script {
-withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-sh "docker build -t bijan9438/monitor:latest ."
-}
-}
-}
-}
-stage('Trivy Scan Image') {
-steps {
-sh "trivy image --format table -o trivy-image-report.html bijan9438/monitor:latest"
-}
-}
-stage('Publish Docker Image') {
-steps {
-script {
-withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-sh "docker push bijan9438/monitor:latest"
-}
-}
-}
-}
-stage('Deploy to EKS') {
-steps {
-withKubeConfig(caCertificate: '', clusterName: 'my-eks22', contextName: '',
-credentialsId: 'k8-token', namespace: 'webapps', restrictKubeConfigAccess: false, serverUrl:
-'https://FE0E7FFC80B64E124F6F3EA8EDA2FE7E.sk1.ap-south-1.eks.amazonaws.com') {
-sh "kubectl apply -f ds.yml -n webapps"
-sleep 60
-}
-}
-}
-stage('Verify deployment') {
-steps {
-withKubeConfig(caCertificate: '', clusterName: 'my-eks22', contextName: '',
-credentialsId: 'k8-token', namespace: 'webapps', restrictKubeConfigAccess: false, serverUrl:
-'https://FE0E7FFC80B64E124F6F3EA8EDA2FE7E.sk1.ap-south-1.eks.amazonaws.com') {
-sh "kubectl get pods -n webapps"
-sh "kubectl get svc -n webapps"
-}
-}
-}
-}
-post {
-always {
-script {
-def jobName = env.JOB_NAME
-def buildNumber = env.BUILD_NUMBER
-def pipelineStatus = currentBuild.result ?: 'UNKNOWN'
-def bannerColor = pipelineStatus.toUpperCase() == 'SUCCESS' ? 'green' : 'red'
-def body = """
-<html>
-<body>
-<div style="border: 4px solid ${bannerColor}; padding: 10px;">
-<h2>${jobName} - Build ${buildNumber}</h2>
-<div style="background-color: ${bannerColor}; padding: 10px;">
-<h3 style="color: white;">Pipeline Status: ${pipelineStatus.toUpperCase()}</h3>
-</div>
-<p>Check the <a href="${BUILD_URL}">console output</a>.</p>
-</div>
-</body>
-</html>
-"""
-emailext (
-subject: "${jobName} - Build ${buildNumber} - ${pipelineStatus.toUpperCase()}",
-body: body,
-to: 'place-your-email@gmail.com',
-from: 'jenkins@example.com',
-replyTo: 'jenkins@example.com',
-mimeType: 'text/html',
-attachmentsPattern: 'trivy-image-report.html'
-)
-}
-}
-}
-}
+
+   stage('Build & Tag Docker Image') {
+      steps {
+         script {
+            withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
+               sh "docker build -t ravdas/ekart:latest -f docker/Dockerfile ."
+            }
+         }
+      }
+   }
+
+   stage('Trivy Scan Image') {
+      steps {
+         sh "trivy image ravdas/ekart:latest > trivy-image-report.txt"
+      }
+   }
+
+   stage('Publish Docker Image') {
+      steps {
+            script {
+               withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
+                  sh "docker push ravdas/ekart:latest"
+               }
+            }
+      }
+   }
+
+   stage('Deploy to Kubernetes') {
+      steps {
+         withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'k8-token', namespace: 'webapps', restrictKubeConfigAccess: false, serverUrl: 'https://172.31.8.162.6443') {
+            sh "kubectl apply -f deploymentservice.yml -n webapps"
+            sh "kubectl get svc -n webapp"
+         }
+      }
+   }
 
 ```
 
+
 ### Setup K8 Cluster
-=================================
+
 Create one master and two worker nodes (3 EC2 instances with 20GB storage, t2.medium, Ubuntu image)
 
 #### 1. Update System Packages [On Master & Worker Nodes]
@@ -410,7 +401,7 @@ sudo apt install -y kubeadm=1.28.1-1.1 kubelet=1.28.1-1.1 kubectl=1.28.1-1.1
 sudo kubeadm init --pod-network-cidr=10.244.0.0/16
 ```
 
-After running the above command, you will receive below below-highlighted. Make sure to run that on the worker nodes so as to join them with the master node.
+After running the above command, you will receive below below-highlighted. Make sure to run that on the worker nodes to join them with the master node.
 
 ![image](https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment/assets/86109995/8db6b226-294f-4790-bf93-2ecc9fae3bec)
 
@@ -537,3 +528,34 @@ execute the yaml file
 ```bash
 kubectl apply -f assign.yml
 ```
+
+#### Generate token using service account in the namespace
+
+Create a yaml file(sec.yml) with the following;
+
+```bash
+'''
+apiVersion: v1
+kind: Secret
+type: kubernetes.io/service-account-token
+metadata:
+   name: mysecretname
+   annotations:
+   kubernetes.io/service-account.name: myserviceaccount
+
+```
+
+execute the yaml file
+
+```bash
+kubectl apply -f sec.yml -n webapps
+```
+To view the secret token,
+
+```bash
+kubectl -n webapps describe secret mysecretname
+```
+
+Add this token in the Jenkins server
+
+Goto manage Jenkins -> credentials -> global -> kind= secret text, secret= <token>, id= k8-token
