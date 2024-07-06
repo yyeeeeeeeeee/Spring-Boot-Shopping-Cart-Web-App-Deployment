@@ -70,8 +70,8 @@ Follow this official document if you find any errors: Link: https://docs.docker.
 #### 4. Add Jenkins repository:
 
    echo  \\ \
-   &nbsp;&nbsp; "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc]  \\ \
-   &nbsp;&nbsp; https://pkg.jenkins.io/debian-stable binary/" |  \\ \
+   &nbsp;&nbsp; "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc]   \\ \
+   &nbsp;&nbsp; https://pkg.jenkins.io/debian-stable binary/" |   \\ \
    &nbsp;&nbsp; sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
 
 #### 5. Update the package index:
