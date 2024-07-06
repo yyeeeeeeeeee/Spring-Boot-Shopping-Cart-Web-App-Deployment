@@ -113,7 +113,9 @@ password:admin
 
 -access using <public_ip:8081>
 
--go inside of the sonatype/nexus3 container: docker exec -it <container_id> /bin/bash\
+-go inside of the sonatype/nexus3 container: docker exec -it <container_id> /bin/bash \
 
--sign to nexus using the username: admin and password; the password is stored in ‘sonatype-work/nexus3/admin.password’.\view it using cat sonatype-work/nexus3/admin.password' command.
+-sign to nexus using the username: admin and password; the password is stored in ‘sonatype-work/nexus3/admin.password’. \
+ 
+-view it using cat sonatype-work/nexus3/admin.password' command.
 
