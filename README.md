@@ -221,12 +221,20 @@ Go to manage Jenkins -> Tools
 Goto Administration -> security -> users -> update token -> name= sonar-token and
 generate
 
+![sonar1](https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment/assets/86109995/9fea03b6-ea35-4067-a0b8-1684850c3b9a)
+
+
 2. Add the token to Jenkins
 
 Goto manage Jenkins -> credentials -> global -> kind= secret text -> secret=<your-token>, id=sonar-token, description=sonar-token
 
+![sonar2](https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment/assets/86109995/6f797a03-29bf-4ed2-94b0-32e8382d6ee3)
+
 3. Configure SonarQube servers in Jekins
+
 Go to manage Jenkins -> system -> sonarqube server -> name=sonar, url=http://<public_ip>:9000, token=sonar-token
+
+![sonar3](https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment/assets/86109995/94d07ab4-392b-495d-881c-782ab9f1474a)
 
 
 ### Configure the Nexus server in Jenkins
@@ -365,6 +373,9 @@ stages {
 
 Create one master and two worker nodes (3 EC2 instances with 20GB storage, t2.medium, Ubuntu image)
 
+![Screenshot from 2024-07-07 00-47-34](https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment/assets/86109995/b0ed4b7c-a0fc-43bc-b831-00627e56fd77)
+
+
 #### 1. Update System Packages [On Master & Worker Nodes]
 
 ```bash
@@ -436,7 +447,8 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/cont
 
 
 
-### Create a Service Account, Role & Assign that role, create a secret for the Service Account, and generate a Token in Jenkins server
+### Create a Service Account, Role & Assign that role, create a secret for the Service Account, and generate a Token in the Jenkins server
+
 
 First create the namespace using,
 
@@ -565,14 +577,25 @@ To view the secret token,
 kubectl -n webapps describe secret mysecretname
 ```
 
-Add this token in the Jenkins server
+Add this token to the Jenkins server
 
 Goto manage Jenkins -> credentials -> global -> kind= secret text, secret= <token>, id= k8-token
 
 ![5565656](https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment/assets/86109995/0851a961-6106-4751-a4ce-a2f5de60c1f0)
 
+
+### Final Results
+
+1. SonarQube Code Analysis
+   
+![Screenshot from 2024-07-07 03-03-48](https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment/assets/86109995/3588833e-c510-4d1b-baf4-17b08c940036)
+
+2. Deployment of the Application
+   
+![Screenshot from 2024-07-07 03-04-22](https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment/assets/86109995/8eabb6b6-6a84-46af-8210-7a1d64e4d442)
+
 ![Screenshot from 2024-07-07 03-04-19](https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment/assets/86109995/98d2475a-182b-4a89-9d0d-980d5a35a7a0)
 
 
-![Screenshot from 2024-07-07 03-04-22](https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment/assets/86109995/8eabb6b6-6a84-46af-8210-7a1d64e4d442)
+
 
