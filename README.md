@@ -245,9 +245,9 @@ Nexus authentication with Jenkins:
 Go to manage Jenkins -> manage files -> add new config -> select Global Maven settings.xml,
 id=maven-setting & click next
 
-Go to content and add 
+Go to content and add; 
 
-`i`) servers with the id = maven-releases, username, and password of the Nexus instance. (one we are going to release for production environments) \
+i) servers with the id = maven-releases, username, and password of the Nexus instance. (one we are going to release for production environments) \
 ii) servers with the id = maven-snapshots, username, and password of the Nexus instance. (one we are going to release for development environments)
 
 ![555555](https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment/assets/86109995/f9e804dd-a126-4052-889a-e93116a7c32d)
@@ -360,7 +360,9 @@ stages {
 
    stage('Deploy to Kubernetes') {
       steps {
-         withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'k8-token', namespace: 'webapps', restrictKubeConfigAccess: false, serverUrl: 'https://172.31.8.162.6443') {
+         withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'k8-token', namespace: 'webapps', restrictKubeConfigAccess: false, serverUrl: 'https://172.31.8.162:6443')
+         # for the serveUrl: use the <ip_address_master:inbound port declared for K8S Cluster>
+         {
             sh "kubectl apply -f deploymentservice.yml -n webapps"
             sh "kubectl get svc -n webapp"
          }
