@@ -246,6 +246,7 @@ Go to manage Jenkins -> manage files -> add new config -> select Global Maven se
 id=maven-setting & click next
 
 Go to content and add \
+
    &nbsp; i) servers with the id = maven-releases, username, and password of the Nexus instance. (one we are going to release for production environments) \
    &nbsp; ii) servers with the id = maven-snapshots, username, and password of the Nexus instance. (one we are going to release for development environments)
 
