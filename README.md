@@ -245,8 +245,8 @@ Nexus authentication with Jenkins:
 Go to manage Jenkins -> manage files -> add new config -> select Global Maven settings.xml,
 id=maven-setting & click next
 
-Go to content and add 
-   &nbsp; i) servers with the id = maven-releases, username, and password of the Nexus instance. (one we are going to release for production environments)
+Go to content and add \
+   &nbsp; i) servers with the id = maven-releases, username, and password of the Nexus instance. (one we are going to release for production environments) \
    &nbsp; ii) servers with the id = maven-snapshots, username, and password of the Nexus instance. (one we are going to release for development environments)
 
 ![555555](https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment/assets/86109995/f9e804dd-a126-4052-889a-e93116a7c32d)
