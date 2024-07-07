@@ -11,6 +11,10 @@ When you create the instances, please edit the security group to allow inbound a
 
 ![image](https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment/assets/86109995/df26d93a-0c09-4552-b27a-8cbf286085a8)
 
+Here, MobaXTerm is used to ssh into and configure each EC2 instance
+
+![image](https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment/assets/86109995/0607acc5-aabf-4845-a991-c41b08cf40df)
+
 ### Install Docker on All 3 VMs
 
 #### Step-by-Step Installation
@@ -122,6 +126,55 @@ Follow this official document if you find any errors: Link: https://docs.docker.
    - Enter the password, install suggested plugins, and create your firstadmin user. or follow this official document link: https://www.Jenkins.io/doc/book/installing/linux/#debianubuntu
 
 
+
+### Close the repository, create your repository, and push those into your GitHub repository
+
+#### 1. Clone the repo:
+
+```bash
+git clone https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment.git
+```
+replace with your GitHub repo
+
+
+#### 2. Change the remote repo
+
+```bash
+git remote set-url origin https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment.git
+
+git remote add new-origin https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment.git
+```
+replace with your GitHub repo
+
+
+#### 3. Initialize Git Repository
+
+```bash
+git init
+```
+
+#### 4. Add Files to Git:
+
+```bash
+Stage all files for the first commit:
+git add .
+```
+
+#### 5. Commit Files:
+
+```bash
+Commit the staged files with a commit message:
+git commit -m "Initial commit"
+```
+
+#### 6. Push to GitHub:
+
+```bash
+Push the local repository to GitHub:
+git push -u origin main
+```
+
+
 ### SonarQube Setup:
 
 -ssh into sonarqube ec2 instance
@@ -183,7 +236,7 @@ sudo apt-get install trivy -y
 or follow this official document link: https://aquasecurity.github.io/trivy/v0.18.3/installation/
 
 
-=========================================================================
+=================================================================================================
 
 ### Install Plugins in Jenkins
 
@@ -424,7 +477,7 @@ sudo apt install -y kubeadm=1.28.1-1.1 kubelet=1.28.1-1.1 kubectl=1.28.1-1.1
 sudo kubeadm init --pod-network-cidr=10.244.0.0/16
 ```
 
-After running the above command, you will receive below below-highlighted. Make sure to run that on the worker nodes to join them with the master node.
+After running the above command, you will receive the below-highlighted. Run that on the worker nodes to join them with the master node.
 
 ![image](https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment/assets/86109995/8db6b226-294f-4790-bf93-2ecc9fae3bec)
 
@@ -589,11 +642,17 @@ Goto manage Jenkins -> credentials -> global -> kind= secret text, secret= <toke
 
 ### Final Results
 
-1. SonarQube Code Analysis
+1. Jenkin Pipeline build is a Success
+   
+![image](https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment/assets/86109995/d758f259-1a77-4fe6-b3be-4d27a466b08a)
+
+Access the application with the <work node 1/2 IP address of K8S Cluster:port received after the build (Highlighted in the above image)>
+
+2. SonarQube Code Analysis
    
 ![Screenshot from 2024-07-07 03-03-48](https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment/assets/86109995/3588833e-c510-4d1b-baf4-17b08c940036)
 
-2. Deployment of the Application
+3. Deployment of the Application
    
 ![Screenshot from 2024-07-07 03-04-22](https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment/assets/86109995/8eabb6b6-6a84-46af-8210-7a1d64e4d442)
 
