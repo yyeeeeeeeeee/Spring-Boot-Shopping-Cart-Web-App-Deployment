@@ -59,7 +59,7 @@ When you create the instances, please edit the security group to allow inbound a
    sudo chmod 666 /var/run/docker.sock
 ```
 
-By following these steps, you should have successfully installed Docker on your Ubuntu system. You can now start using Docker to containerize and manage your applications.
+Following these steps, you should have successfully installed Docker on your Ubuntu system. You can now start using Docker to containerize and manage your applications.
 
 Follow this official document if you find any errors: Link: https://docs.docker.com/engine/install/ubuntu/
 
@@ -247,8 +247,8 @@ id=maven-setting & click next
 
 Go to content and add 
 
-\i) servers with the id = maven-releases, username, and password of the Nexus instance. (one we are going to release for production environments) \
-\ii) servers with the id = maven-snapshots, username, and password of the Nexus instance. (one we are going to release for development environments)
+`i`) servers with the id = maven-releases, username, and password of the Nexus instance. (one we are going to release for production environments) \
+ii) servers with the id = maven-snapshots, username, and password of the Nexus instance. (one we are going to release for development environments)
 
 ![555555](https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment/assets/86109995/f9e804dd-a126-4052-889a-e93116a7c32d)
 
