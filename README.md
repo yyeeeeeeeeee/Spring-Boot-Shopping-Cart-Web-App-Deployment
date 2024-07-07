@@ -231,6 +231,7 @@ Go to manage Jenkins -> system -> sonarqube server -> name=sonar, url=http://<pu
 
 ### Configure the Nexus server in Jenkins
 
+
 Nexus authentication with Jenkins:
 
 Go to manage Jenkins -> manage files -> add new config -> select Global Maven settings.xml,
@@ -240,11 +241,18 @@ Go to content and add
    &nbsp; i) servers with the id = maven-releases, username, and password of the Nexus instance. (one we are going to release for production environments)
    &nbsp; ii) servers with the id = maven-snapshots, username, and password of the Nexus instance. (one we are going to release for development environments)
 
+![555555](https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment/assets/86109995/f9e804dd-a126-4052-889a-e93116a7c32d)
+
+
 Nexus Configuration:
 
 Update your pom.xml file with your Nexus repositories.
 
 Copy the maven-releases URL, and maven-snapshots URL from the Nexus Repository  and update in the pom.xml file in the code repository.
+
+![Screenshot from 2024-07-07 03-02-58](https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment/assets/86109995/b2ac7bd5-717e-47de-b459-273a1df0da6e)
+
+
 
 ### Create the pipeline in Jenkins.
 
@@ -560,3 +568,11 @@ kubectl -n webapps describe secret mysecretname
 Add this token in the Jenkins server
 
 Goto manage Jenkins -> credentials -> global -> kind= secret text, secret= <token>, id= k8-token
+
+![5565656](https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment/assets/86109995/0851a961-6106-4751-a4ce-a2f5de60c1f0)
+
+![Screenshot from 2024-07-07 03-04-19](https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment/assets/86109995/98d2475a-182b-4a89-9d0d-980d5a35a7a0)
+
+
+![Screenshot from 2024-07-07 03-04-22](https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment/assets/86109995/8eabb6b6-6a84-46af-8210-7a1d64e4d442)
+
