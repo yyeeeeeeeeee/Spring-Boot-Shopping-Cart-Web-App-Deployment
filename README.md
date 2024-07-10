@@ -236,7 +236,7 @@ sudo apt-get install trivy -y
 or follow this official document link: https://aquasecurity.github.io/trivy/v0.18.3/installation/
 
 
-===================================================================================================
+=======================================================================================================
 
 ### Install Plugins in Jenkins
 
