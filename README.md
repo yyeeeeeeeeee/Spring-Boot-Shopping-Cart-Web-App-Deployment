@@ -127,7 +127,7 @@ Follow this official document if you find any errors: Link: https://docs.docker.
 
 
 
-### Close the repository, create your repository, and push those into your GitHub repository
+### Clone the repository, create your repository, and push those into your GitHub repository
 
 #### 1. Clone the repo:
 
