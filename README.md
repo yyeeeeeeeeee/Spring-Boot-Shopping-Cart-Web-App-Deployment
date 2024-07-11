@@ -134,8 +134,6 @@ Follow this official document if you find any errors: Link: https://docs.docker.
 ```bash
 git clone https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment.git
 ```
-replace with your GitHub repo
-
 
 #### 2. Change the remote repo
 
