@@ -11,7 +11,7 @@ When you create the instances, please edit the security group to allow inbound a
 
 ![image](https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment/assets/86109995/df26d93a-0c09-4552-b27a-8cbf286085a8)
 
-Here, MobaXTerm is used to ssh into and configure each EC2 instance
+Here, MobaXtreme is used to ssh into and configure each EC2 instance
 
 ![image](https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment/assets/86109995/0607acc5-aabf-4845-a991-c41b08cf40df)
 
