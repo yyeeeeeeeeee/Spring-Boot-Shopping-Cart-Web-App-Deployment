@@ -133,42 +133,43 @@ Follow this official document if you find any errors: Link: https://docs.docker.
 
 ```bash
 git clone https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment.git
+
 ```
 
-#### 2. Change the remote repo
-
-```bash
-git remote set-url origin https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment.git
-
-git remote add new-origin https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment.git
-```
-replace with your GitHub repo
-
-
-#### 3. Initialize Git Repository
+#### 2. Initialize Git Repository
 
 ```bash
 git init
 ```
 
-#### 4. Add Files to Git:
+#### 3. Add Files to Git:
 
 ```bash
-Stage all files for the first commit:
+# Stage all files for the first commit:
+
 git add .
 ```
 
-#### 5. Commit Files:
+#### 4. Commit Files:
 
 ```bash
-Commit the staged files with a commit message:
+# Commit the staged files with a commit message:
+
 git commit -m "Initial commit"
 ```
+
+#### 5. Change the remote repo
+
+```
+git remote add new-origin https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment.git
+```
+replace with your GitHub repo
 
 #### 6. Push to GitHub:
 
 ```bash
-Push the local repository to GitHub:
+# Push the local repository to GitHub:
+
 git push -u origin main
 ```
 
