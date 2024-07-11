@@ -335,7 +335,7 @@ environment {
 stages {
    stage('Git Checkout') {
       steps {
-         git branch: 'main', url: ‘https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-  Deployment.git’
+         git branch: 'main', url: ‘https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment.git’
             }
 }
 
