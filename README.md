@@ -1,4 +1,4 @@
-# Spring-Boot-Shopping-Cart-Web-App-Deployment_End-End CI/CD Project
+# Spring Boot based Shopping Cart Web App Deployment _ End-End CI/CD Project
 
 ![image](https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment/assets/86109995/50483368-44d8-4409-af22-9e1be711c8e0)
 
