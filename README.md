@@ -645,17 +645,19 @@ Goto manage Jenkins -> credentials -> global -> kind= secret text, secret= <toke
    
 ![image](https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment/assets/86109995/d758f259-1a77-4fe6-b3be-4d27a466b08a)
 
-Access the application with the <work node 1/2 IP address of K8S Cluster:port received after the build (Highlighted in the above image)>
+Access the application with the <work node 1 or 2 IP address of K8S Cluster:port received after the build (Highlighted in the above image)>
 
-2. SonarQube Code Analysis
-   
-![Screenshot from 2024-07-07 03-03-48](https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment/assets/86109995/3588833e-c510-4d1b-baf4-17b08c940036)
-
-3. Deployment of the Application
+2. Deployment of the Application
    
 ![Screenshot from 2024-07-07 03-04-22](https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment/assets/86109995/8eabb6b6-6a84-46af-8210-7a1d64e4d442)
 
 ![Screenshot from 2024-07-07 03-04-19](https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment/assets/86109995/98d2475a-182b-4a89-9d0d-980d5a35a7a0)
+
+3. SonarQube Code Analysis
+   
+![Screenshot from 2024-07-07 03-03-48](https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment/assets/86109995/3588833e-c510-4d1b-baf4-17b08c940036)
+
+
 
 
 
