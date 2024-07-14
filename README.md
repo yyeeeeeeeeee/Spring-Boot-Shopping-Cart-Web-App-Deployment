@@ -7,7 +7,7 @@ Create 3 EC2 Instances with 20GB storage, 4GB RAM and choose t2.medium
 
 ![image](https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment/assets/86109995/d67e8e6a-6bde-4013-afd2-3973457947b6)
 
-When you create the instances, please edit the security group to allow inbound and outbound traffic.
+When you create the instances, please create a security group to allow inbound and outbound traffic.
 
 ![image](https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment/assets/86109995/df26d93a-0c09-4552-b27a-8cbf286085a8)
 
