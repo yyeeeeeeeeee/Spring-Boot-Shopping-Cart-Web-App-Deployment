@@ -508,7 +508,7 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/cont
 First create the namespace using,
 
 ```bash
-Kubectl create namespace webapps
+kubectl create namespace webapps
 ```
 
 #### Creating Service Account
