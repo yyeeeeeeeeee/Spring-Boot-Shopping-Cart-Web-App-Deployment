@@ -2,52 +2,36 @@ pipeline {
     agent any
 
     environment {
-   SCANNER_HOME = tool 'sonar-scanner'
-}
+        DOCKER_CREDENTIALS_ID = 'docker-cred' // Docker credentials ID
+        DOCKER_IMAGE = 'ravdas/ekart:latest'  // Docker image name
+    }
 
     stages {
         stage('Git Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/yyeeeeeeeeee/Spring-Boot-Shopping-Cart-Web-App-Deployment.git'
+                git branch: 'main', url: 'https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment.git'
             }
         }
 
-   stage('Compile') {
-      steps {
-         sh "mvn compile"
-      }
-   }
-   
-   stage('Unit Test') {
-      steps {
-         sh "mvn test -DskipTests=true"
-      }
-   }
- 
-   stage('Build') {
-      steps {
-         sh "mvn package -DskipTests=true"
-      }
-   }
-
-   stage('Build & Tag Docker Image') {
-      steps {
-         script {
-            withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-               sh "docker build -t ravdas/ekart:latest -f docker/Dockerfile ."
+        stage('Build & Tag Docker Image') {
+            steps {
+                script {
+                    withDockerRegistry(credentialsId: DOCKER_CREDENTIALS_ID) {
+                        sh "docker build -t ${DOCKER_IMAGE} -f docker/Dockerfile ."
+                    }
+                }
             }
-         }
-      }
-   }
+        }
 
-
-   stage('Publish Docker Image') {
-      steps {
-            script {
-               withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-                  sh "docker push ravdas/ekart:latest"
-               }
+        stage('Publish Docker Image') {
+            steps {
+                script {
+                    withDockerRegistry(credentialsId: DOCKER_CREDENTIALS_ID) {
+                        sh "docker push ${DOCKER_IMAGE}"
+                    }
+                }
             }
-      }
-   }
+        }
+    }
+}
 
