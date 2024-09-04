@@ -1,37 +1,42 @@
 pipeline {
     agent any
 
-    environment {
-        DOCKER_CREDENTIALS_ID = 'docker-cred' // Docker credentials ID
-        DOCKER_IMAGE = 'ravdas/ekart:latest'  // Docker image name
-    }
-
     stages {
-        stage('Git Checkout') {
+       
+        stage('Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/yyeeeeeeeeee/Spring-Boot-Shopping-Cart-Web-App-Deployment.git'
             }
         }
 
-        stage('Build & Tag Docker Image') {
+   
+        stage('Build') {
             steps {
-                script {
-                    withDockerRegistry(credentialsId: DOCKER_CREDENTIALS_ID) {
-                        sh "docker build -t ${DOCKER_IMAGE} -f docker/Dockerfile ."
-                    }
-                }
+                powershell 'mvn package' // Runs the Maven package command to compile the project and package it into a JAR
             }
         }
 
-        stage('Publish Docker Image') {
+ 
+        stage('Test') {
+            steps {
+                powershell 'mvn test' // Runs the Maven test command to execute unit tests
+            }
+        }
+
+
+        stage('Deploy') {
             steps {
                 script {
-                    withDockerRegistry(credentialsId: DOCKER_CREDENTIALS_ID) {
-                        sh "docker push ${DOCKER_IMAGE}"
-                    }
+                    sh 'docker build -t shopping-cart:latest .'
+                    
+                    sh '''
+                        docker run -d \
+                        --name shopping-cart \
+                        -p 8070:8070 \
+                        shopping-cart:latest
+                    '''
                 }
             }
         }
     }
 }
-
