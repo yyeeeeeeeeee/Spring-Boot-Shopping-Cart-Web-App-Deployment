@@ -10,13 +10,13 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh "mvn package -DskipTests=true" // Runs the Maven package command to compile the project and package it into a JAR
+                powershell 'mvn package'  // Runs the Maven package command to compile the project and package it into a JAR
             }
         }
 
         stage('Test') {
             steps {
-                sh "mvn test -DskipTests=true" // Runs the Maven test command to execute unit tests
+                powershell 'mvn test' // Runs the Maven test command to execute unit tests
             }
         }
 
