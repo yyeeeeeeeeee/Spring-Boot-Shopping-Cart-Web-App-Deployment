@@ -1,9 +1,10 @@
 pipeline {
     agent any
+
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/yyeeeeeeeeee/Spring-Boot-Shopping-Cart-Web-App-Deployment.git'
+                git branch: 'main', url: 'https://github.com/RavDas/Spring-Boot-Shopping-Cart-Web-App-Deployment.git'
             }
         }
 
@@ -22,15 +23,17 @@ pipeline {
         stage('Build & Tag Docker Image') {
             steps {
                 script {
-                    docker.build('yongyee/shopping-cart:latest')
+                    docker.build('shopping-cart:latest')
                 }
             }
         }
 
         stage('Publish Docker Image') {
             steps {
-                script {
-                    docker.image('shopping-cart:latest').push('latest')
+                withDockerRegistry([credentialsId: '78e6fab5-8a1f-4f3d-be7a-f09e7a5bcbf7', url: 'https://index.docker.io/v1/']) {
+                    script {
+                        docker.image('shopping-cart:latest').push('latest')
+                    }
                 }
             }
         }
